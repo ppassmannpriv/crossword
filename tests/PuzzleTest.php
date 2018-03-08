@@ -7,15 +7,20 @@ use Crossword\Wordlist;
 
 class PuzzleTest extends \PHPUnit_Framework_TestCase
 {
+    protected $puzzle;
+
+    public function setup()
+    {
+        $this->puzzle = new Puzzle(new Wordlist);
+    }
 
     public function testPuzzleCanBeLoaded()
     {
-        $puzzle = new Puzzle(new Wordlist);
-
         $this->assertEquals(
             '15,15',
-            $puzzle->getCoordinates()
+            $this->puzzle->getCoordinates()
         );
+        var_dump($this->puzzle->toTxt());
     }
 
 }

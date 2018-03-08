@@ -7,11 +7,13 @@ class Grid {
     protected $col;
     protected $row;
     protected $grid;
+    protected $wordlist;
 
-    public function __construct(int $col, int $row)
+    public function __construct(int $col, int $row, Wordlist $wordlist)
     {
         $this->col = $col;
         $this->row = $row;
+        $this->wordlist = $wordlist;
 
         $this->buildGrid();
     }
@@ -42,6 +44,8 @@ class Grid {
             $i++;
         }
         $this->grid = $rows;
+
+        $this->fillGrid();
     }
 
     public function isFieldEmtpy(int $row, int $col) : bool
@@ -52,5 +56,20 @@ class Grid {
     public function getSize()
     {
         return $this->row.','.$this->col;
+    }
+
+    protected function fillGrid()
+    {
+        $this->setFirstWord();
+    }
+
+    private function setFirstWord()
+    {
+        $count = 0;
+        foreach(str_split($this->wordlist->getList()[0]->getWord()) as $char)
+        {
+            $this->grid[0][$count] = $char;
+            $count++;
+        }
     }
 }
