@@ -26,6 +26,11 @@ class Puzzle {
         return $this->grid->getGrid();
     }
 
+    public function getGridScore()
+    {
+        return $this->grid->getScore();
+    }
+
     public function toHtml()
     {
         $html = '<div id="puzzle">';

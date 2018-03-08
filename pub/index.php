@@ -8,3 +8,5 @@ require __DIR__ . '/../src/Grid.php';
 $puzzle = new Crossword\Puzzle(new Crossword\Wordlist);
 
 echo $puzzle->toTxt();
+
+echo $puzzle->getGridScore();

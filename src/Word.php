@@ -10,6 +10,8 @@ class Word
     protected $col;
     protected $row;
     protected $direction;
+    protected $placed = false;
+    protected $coords = [];
 
     public function __construct(string $word, string $clue)
     {
@@ -64,5 +66,25 @@ class Word
     public function setRow($row)
     {
         $this->row = $row;
+    }
+
+    public function setPlacedFlag(bool $placed)
+    {
+        $this->placed = $placed;
+    }
+
+    public function getPlacedFlag() : bool
+    {
+        return $this->placed;
+    }
+
+    public function getCoords() : array
+    {
+        return $this->coords;
+    }
+
+    public function setCoords(array $coords)
+    {
+        return $this->coords = $coords;
     }
 }
