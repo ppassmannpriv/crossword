@@ -95,6 +95,16 @@ class Grid
         }
     }
 
+    private function fitWordInGrid(Word $word)
+    {
+        $this->suggestCoordinates($word);
+        foreach ($word->getCoords() as $coord)
+        {
+           echo $this->checkFitScore($coord['row'], $coord['col'], $coord['direction'], $word->getWord());
+        }
+
+    }
+
     private function suggestCoordinates(Word $word)
     {
         $coords = [];
@@ -103,8 +113,7 @@ class Grid
             $coords = array_merge($this->checkCharMatch($char), $coords);
         }
         $word->setCoords($coords);
-        var_dump($word->getWord());
-        var_dump(count($coords));
+
     }
 
     private function checkCharMatch($char)
@@ -120,16 +129,109 @@ class Grid
                 $cCol++;
                 if($cell === $char)
                 {
-                    $coords[] = $cRow.', '.$cCol;
+                    if($this->isFieldEmtpy($cRow, $cCol+1))
+                    {
+                        $coords[] = array('row' => $cRow, 'col' => $cCol, 'direction' => 'horizontal');
+                    } else {
+                        $coords[] = array('row' => $cRow, 'col' => $cCol, 'direction' => 'vertical');
+                    }
                 }
             }
         }
-
         return $coords;
     }
 
-    private function fitWordInGrid(Word $word)
+    public function checkFitScore(int $row, int $col, string $direction, $word)
     {
-        $this->suggestCoordinates($word);
+        if($col < 1 or $row < 1 or $col >= $this->col or $row >= $this->row)
+        {
+            return 0;
+        }
+
+        $score = 1;
+        $count = 1;
+        $characterArray = \str_split($word);
+
+        foreach($characterArray as $letter)
+        {
+            $letter;
+            $currentCell = $this->grid[$row-1][$col-1];
+
+            if($currentCell === null)
+            {
+                $score = 0;
+            }
+            if($currentCell === $letter)
+            {
+                $score++;
+            }
+
+            if($direction === 'vertical')
+            {
+
+                if($currentCell !== $letter)
+                {
+                    if(!$this->isFieldEmtpy($row - 1, $col))
+                    {
+                        $score = 0;
+                    }
+                    if(!$this->isFieldEmtpy($row + 1, $col))
+                    {
+                        $score = 0;
+                    }
+                }
+                if($count === 1)
+                {
+                    if(!$this->isFieldEmtpy($row, $col - 1))
+                    {
+                        $score = 0;
+                    }
+                }
+                if($count === strlen($word))
+                {
+                    if(!$this->isFieldEmtpy($row, $col +1))
+                    {
+                        $score = 0;
+                    }
+                }
+            } else {
+                if($currentCell !== $letter)
+                {
+                    if(!$this->isFieldEmtpy($row, $col +1 ))
+                    {
+                        $score = 0;
+                    }
+                    if(!$this->isFieldEmtpy($row, $col - 1))
+                    {
+                        $score = 0;
+                    }
+                }
+                if($count === 1)
+                {
+                    if($this->isFieldEmtpy($row - 1, $col))
+                    {
+                        $score = 0;
+                    }
+                }
+                if($count === strlen($word))
+                {
+                    if($this->isFieldEmtpy($row + 1, $col))
+                    {
+                        $score = 0;
+                    }
+                }
+            }
+
+            if($direction === 'vertical')
+            {
+                $row++;
+            } else {
+                $col++;
+            }
+
+            $count++;
+        }
+
+        return $score;
     }
 }
