@@ -44,6 +44,7 @@ class Wordlist {
         {
             $this->list[] = new Word($seed[0], $seed[1]);
         }
+        $this->sortList();
     }
 
     private function seedList()
@@ -63,8 +64,12 @@ class Wordlist {
 
     public function getList()
     {
-        $this->sortList();
         return $this->list;
+    }
+
+    public function getMaxLength()
+    {
+        return $this->list[0]->getLength();
     }
 
 }

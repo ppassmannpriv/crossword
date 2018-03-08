@@ -16,7 +16,7 @@ class Grid {
         $this->buildGrid();
     }
 
-    public function getGrid()
+    public function getGrid() : array
     {
         if(empty($this->grid))
         {
@@ -44,8 +44,13 @@ class Grid {
         $this->grid = $rows;
     }
 
-    public function isFieldEmtpy(int $row, int $col)
+    public function isFieldEmtpy(int $row, int $col) : bool
     {
         return $this->grid[$row - 1][$col - 1] === '-';
+    }
+
+    public function getSize()
+    {
+        return $this->row.','.$this->col;
     }
 }
